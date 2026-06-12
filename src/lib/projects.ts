@@ -1,4 +1,4 @@
-export type ProjectCategory = "Backend" | "iOS" | "AI" | "Frontend" | "Full-Stack";
+export type ProjectCategory = "Backend" | "iOS" | "Frontend" | "Full-Stack";
 
 export interface Project {
   id: string;
@@ -48,8 +48,8 @@ export const projects: Project[] = [
     description:
       "AI-powered career simulator for Indonesian college students. Generates personalized 5-year career timelines with salary projections, risk warnings, and milestone events. Selected for Festival AI Nusantara showcase and passed Microsoft Elevate Innovation program.",
     tech: ["React", "Gemini API", "Node.js", "Express", "Tailwind"],
-    tags: ["AI", "Microsoft Elevate", "Competition Winner", "2026"],
-    category: "AI",
+    tags: ["AI", "Full-Stack", "Microsoft Elevate", "Competition Winner", "2026"],
+    category: "Full-Stack",
     accentColor: "#ff6b2b",
     links: [
       { label: "Live Demo", url: "#" },

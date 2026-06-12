@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projects, ProjectCategory } from "@/lib/projects";
 
-const categories: ("All" | ProjectCategory)[] = ["All", "Frontend", "Backend", "iOS", "AI", "Full-Stack"];
+const categories: ("All" | ProjectCategory)[] = ["All", "Frontend", "Backend", "iOS", "Full-Stack"];
 import ProjectCard from "./ui/ProjectCard";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,7 +17,7 @@ export default function Projects() {
   const [activeCategory, setActiveCategory] = useState<"All" | ProjectCategory>("All");
 
   const filteredProjects = projects.filter(
-    (project) => activeCategory === "All" || project.category === activeCategory
+    (project) => activeCategory === "All" || project.category === activeCategory || project.tags.includes(activeCategory)
   );
 
   return (
