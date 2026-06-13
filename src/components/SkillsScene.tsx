@@ -140,12 +140,12 @@ function ConstellationScene() {
   );
 }
 
-export default function SkillsScene() {
+export default function SkillsScene({ isDesktop = true }: { isDesktop?: boolean }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 8], fov: 45 }}
-      dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true }}
+      dpr={isDesktop ? [1, 2] : [1, 1]}
+      gl={{ antialias: isDesktop, alpha: true }}
       style={{ background: "transparent" }}
     >
       <ConstellationScene />

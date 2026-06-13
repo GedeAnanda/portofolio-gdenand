@@ -12,7 +12,6 @@ const NUM_SEGS   = 32;
 const SEG_LEN    = 0.175;
 const GRAVITY    = -22;
 const DAMPING    = 0.991;
-const ITERATIONS = 28;
 const CARD_W     = 2.6;
 const CARD_H     = 3.8;
 const CARD_DEPTH = 0.06;
@@ -31,7 +30,7 @@ function initRope(): Pt[] {
     mkPt(ANCHOR.x, ANCHOR.y, i === 0)
   );
 }
-function stepRope(pts: Pt[], dt: number, dragPos: THREE.Vector3 | null) {
+function stepRope(pts: Pt[], dt: number, dragPos: THREE.Vector3 | null, iterations: number) {
   const d = Math.min(dt, 0.032);
   for (const p of pts) {
     if (p.pinned) continue;
@@ -45,7 +44,7 @@ function stepRope(pts: Pt[], dt: number, dragPos: THREE.Vector3 | null) {
     tip.pos.lerp(dragPos, 0.5);
     tip.old.copy(tip.pos);
   }
-  for (let iter = 0; iter < ITERATIONS; iter++) {
+  for (let iter = 0; iter < iterations; iter++) {
     pts[0].pos.copy(ANCHOR);
     for (let i = 0; i < NUM_SEGS; i++) {
       const a = pts[i], b = pts[i + 1];
@@ -262,7 +261,7 @@ function LanyardRope({ ptsRef }: { ptsRef: React.RefObject<Pt[]> }) {
 /* ================================================================
    MAIN SCENE
    ================================================================ */
-function Scene({ cardTex }: { cardTex: THREE.CanvasTexture | null }) {
+function Scene({ cardTex, isDesktop }: { cardTex: THREE.CanvasTexture | null, isDesktop: boolean }) {
   const { camera, gl } = useThree();
   const ptsRef = useRef<Pt[]>(initRope());
   const cardRef = useRef<THREE.Mesh>(null);
@@ -349,7 +348,7 @@ function Scene({ cardTex }: { cardTex: THREE.CanvasTexture | null }) {
 
   useFrame((_, delta) => {
     const pts = ptsRef.current;
-    stepRope(pts, delta, dragRef.current.active ? dragRef.current.pos : null);
+    stepRope(pts, delta, dragRef.current.active ? dragRef.current.pos : null, isDesktop ? 28 : 12);
 
     const tip  = pts[NUM_SEGS];
     const prev = pts[NUM_SEGS - 5];
@@ -439,7 +438,7 @@ function Scene({ cardTex }: { cardTex: THREE.CanvasTexture | null }) {
 /* ================================================================
    EXPORTED COMPONENT
    ================================================================ */
-export default function LanyardCard3D() {
+export default function LanyardCard3D({ isDesktop }: { isDesktop: boolean }) {
   const [cardTex, setCardTex] = useState<THREE.CanvasTexture | null>(null);
 
   useEffect(() => {
@@ -453,11 +452,11 @@ export default function LanyardCard3D() {
     >
       <Canvas
         camera={{ position: [0.2, 1, 13], fov: 38 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={isDesktop ? [1, 1.5] : [1, 1]}
+        gl={{ antialias: isDesktop, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <Scene cardTex={cardTex} />
+        <Scene cardTex={cardTex} isDesktop={isDesktop} />
       </Canvas>
     </div>
   );

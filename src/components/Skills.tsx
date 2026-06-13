@@ -105,11 +105,11 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* Desktop: 3D Constellation */}
-        <div className="hidden md:block">
-          {headerInView && isDesktop && mounted && (
+        {/* 3D Constellation */}
+        <div className="block mt-8">
+          {headerInView && mounted && (
             <>
-              <div className="h-[500px] lg:h-[600px] rounded-2xl overflow-hidden border border-[var(--border-color)] bg-[var(--surface)]">
+              <div className="h-[400px] lg:h-[600px] rounded-2xl overflow-hidden border border-[var(--border-color)] bg-[var(--surface)]">
                 <Suspense
                   fallback={
                     <div className="w-full h-full flex items-center justify-center">
@@ -117,7 +117,7 @@ export default function Skills() {
                     </div>
                   }
                 >
-                  <SkillsScene />
+                  <SkillsScene isDesktop={isDesktop} />
                 </Suspense>
               </div>
               <p className="text-center text-xs text-[var(--text-secondary)] mt-4">
@@ -125,11 +125,6 @@ export default function Skills() {
               </p>
             </>
           )}
-        </div>
-
-        {/* Mobile: Pill Grid */}
-        <div className="md:hidden">
-          <MobileFallback />
         </div>
       </div>
     </section>

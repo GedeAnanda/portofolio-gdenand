@@ -178,9 +178,9 @@ export default function Hero() {
             className="order-1 lg:order-2 relative w-full flex items-center justify-center"
             style={{ height: "clamp(560px, 100vh, 900px)" }}
           >
-            {show3D && isDesktop ? (
+            {show3D ? (
               <>
-                <LanyardCard3D />
+                <LanyardCard3D isDesktop={isDesktop} />
                 {/* Hint label */}
                 <motion.p
                   initial={{ opacity: 0 }}
@@ -192,7 +192,7 @@ export default function Hero() {
                   drag to swing ↕
                 </motion.p>
               </>
-            ) : mounted && !isDesktop ? (
+            ) : mounted ? (
               <div className="w-full flex flex-col items-center justify-center pt-12 lg:pt-0">
                 <div className="relative w-64 h-80 rounded-[2rem] overflow-hidden border border-[var(--border-color)] bg-[var(--surface)] shadow-2xl shadow-[var(--accent-primary)]/10">
                   <Image 
