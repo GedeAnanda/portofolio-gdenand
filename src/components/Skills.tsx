@@ -100,20 +100,24 @@ export default function Skills() {
 
         {/* Desktop: 3D Constellation */}
         <div className="hidden md:block">
-          <div className="h-[500px] lg:h-[600px] rounded-2xl overflow-hidden border border-[var(--border-color)] bg-[var(--surface)]">
-            <Suspense
-              fallback={
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="w-12 h-12 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
-                </div>
-              }
-            >
-              <SkillsScene />
-            </Suspense>
-          </div>
-          <p className="text-center text-xs text-[var(--text-secondary)] mt-4">
-            Click and drag to rotate · Hover nodes for details
-          </p>
+          {headerInView && isDesktop && mounted && (
+            <>
+              <div className="h-[500px] lg:h-[600px] rounded-2xl overflow-hidden border border-[var(--border-color)] bg-[var(--surface)]">
+                <Suspense
+                  fallback={
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-12 h-12 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  }
+                >
+                  <SkillsScene />
+                </Suspense>
+              </div>
+              <p className="text-center text-xs text-[var(--text-secondary)] mt-4">
+                Click and drag to rotate · Hover nodes for details
+              </p>
+            </>
+          )}
         </div>
 
         {/* Mobile: Pill Grid */}
