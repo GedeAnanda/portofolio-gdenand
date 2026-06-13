@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const LanyardCard3D = dynamic(() => import("./LanyardCard3D"), {
@@ -189,8 +190,15 @@ export default function Hero() {
             ) : mounted && !isDesktop ? (
               <div className="w-full flex flex-col items-center justify-center pt-12 lg:pt-0">
                 <div className="relative w-64 h-80 rounded-[2rem] overflow-hidden border border-[var(--border-color)] bg-[var(--surface)] shadow-2xl shadow-[var(--accent-primary)]/10">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/avatar.jpg" alt="Nanda" className="w-full h-full object-cover" style={{ filter: "brightness(1.1) contrast(1.05)" }} />
+                  <Image 
+                    src="/avatar.jpg" 
+                    alt="Nanda" 
+                    fill
+                    sizes="(max-width: 1024px) 256px, 320px"
+                    priority
+                    className="object-cover" 
+                    style={{ filter: "brightness(1.1) contrast(1.05)" }} 
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0f] via-transparent to-transparent opacity-90" />
                   <div className="absolute bottom-6 left-6 right-6">
                     <h3 className="text-white font-bold text-2xl mb-1">Nanda</h3>
