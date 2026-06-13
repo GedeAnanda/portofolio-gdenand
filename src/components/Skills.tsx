@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import dynamic from "next/dynamic";
 import { skills, categoryColors, categoryLabels } from "@/lib/skills";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const SkillsScene = dynamic(() => import("./SkillsScene"), {
   ssr: false,
@@ -57,6 +58,12 @@ function MobileFallback() {
 export default function Skills() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const [mounted, setMounted] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section
