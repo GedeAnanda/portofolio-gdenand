@@ -453,7 +453,7 @@ export default function LanyardCard3D() {
     >
       <Canvas
         camera={{ position: [0.2, 1, 13], fov: 38 }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >

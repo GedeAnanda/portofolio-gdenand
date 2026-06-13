@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const LanyardCard3D = dynamic(() => import("./LanyardCard3D"), {
   ssr: false,
@@ -22,8 +23,11 @@ const roles = [
 
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   useEffect(() => {
+    setMounted(true);
     const id = setInterval(() => setRoleIndex((p) => (p + 1) % roles.length), 3000);
     return () => clearInterval(id);
   }, []);
@@ -165,21 +169,38 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-            className="order-1 lg:order-2 relative w-full"
+            className="order-1 lg:order-2 relative w-full flex items-center justify-center"
             style={{ height: "clamp(560px, 100vh, 900px)" }}
           >
-            <LanyardCard3D />
-
-            {/* Hint label */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.5 }}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] text-[var(--text-secondary)] tracking-[0.25em] uppercase"
-              style={{ fontFamily: "var(--font-jetbrains)" }}
-            >
-              drag to swing ↕
-            </motion.p>
+            {mounted && isDesktop ? (
+              <>
+                <LanyardCard3D />
+                {/* Hint label */}
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.5 }}
+                  className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] text-[var(--text-secondary)] tracking-[0.25em] uppercase"
+                  style={{ fontFamily: "var(--font-jetbrains)" }}
+                >
+                  drag to swing ↕
+                </motion.p>
+              </>
+            ) : mounted && !isDesktop ? (
+              <div className="w-full flex flex-col items-center justify-center pt-12 lg:pt-0">
+                <div className="relative w-64 h-80 rounded-[2rem] overflow-hidden border border-[var(--border-color)] bg-[var(--surface)] shadow-2xl shadow-[var(--accent-primary)]/10">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/avatar.jpg" alt="Nanda" className="w-full h-full object-cover" style={{ filter: "brightness(1.1) contrast(1.05)" }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0f] via-transparent to-transparent opacity-90" />
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <h3 className="text-white font-bold text-2xl mb-1">Nanda</h3>
+                    <div className="bg-[var(--accent-primary)] px-3 py-1 rounded-full w-fit">
+                      <p className="text-white font-mono text-xs font-bold">BACKEND ENGINEER</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </motion.div>
 
         </div>
