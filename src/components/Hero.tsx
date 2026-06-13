@@ -193,25 +193,8 @@ export default function Hero() {
                 </motion.p>
               </>
             ) : mounted ? (
-              <div className="w-full flex flex-col items-center justify-center pt-12 lg:pt-0">
-                <div className="relative w-64 h-80 rounded-[2rem] overflow-hidden border border-[var(--border-color)] bg-[var(--surface)] shadow-2xl shadow-[var(--accent-primary)]/10">
-                  <Image 
-                    src="/avatar.jpg" 
-                    alt="Nanda" 
-                    fill
-                    sizes="(max-width: 1024px) 256px, 320px"
-                    priority
-                    className="object-cover" 
-                    style={{ filter: "brightness(1.1) contrast(1.05)" }} 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0f] via-transparent to-transparent opacity-90" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <h3 className="text-white font-bold text-2xl mb-1">Nanda</h3>
-                    <div className="bg-[var(--accent-primary)] px-3 py-1 rounded-full w-fit">
-                      <p className="text-white font-mono text-xs font-bold">BACKEND ENGINEER</p>
-                    </div>
-                  </div>
-                </div>
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="w-10 h-10 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
               </div>
             ) : null}
           </motion.div>
