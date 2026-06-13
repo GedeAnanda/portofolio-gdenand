@@ -5,11 +5,11 @@ import ThemeProvider from "@/components/ThemeProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
-import Journey from "@/components/Journey";
-import Contact from "@/components/Contact";
+const About = dynamic(() => import("@/components/About"));
+const Projects = dynamic(() => import("@/components/Projects"));
+const Skills = dynamic(() => import("@/components/Skills"));
+const Journey = dynamic(() => import("@/components/Journey"));
+const Contact = dynamic(() => import("@/components/Contact"));
 
 const LoadingScreen = dynamic(() => import("@/components/LoadingScreen"), {
   ssr: false,

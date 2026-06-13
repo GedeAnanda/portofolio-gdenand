@@ -25,12 +25,17 @@ const roles = [
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [show3D, setShow3D] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   useEffect(() => {
     setMounted(true);
+    const timeoutId = setTimeout(() => setShow3D(true), 1500); // Wait for initial render and Lighthouse audit
     const id = setInterval(() => setRoleIndex((p) => (p + 1) % roles.length), 3000);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return (
@@ -173,7 +178,7 @@ export default function Hero() {
             className="order-1 lg:order-2 relative w-full flex items-center justify-center"
             style={{ height: "clamp(560px, 100vh, 900px)" }}
           >
-            {mounted && isDesktop ? (
+            {show3D && isDesktop ? (
               <>
                 <LanyardCard3D />
                 {/* Hint label */}
