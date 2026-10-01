@@ -58,14 +58,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#e6e6e2" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0f0e" },
-  ],
+  themeColor: "#fffdf8",
 };
 
-// Runs before first paint so the stored or system theme never flashes.
-const themeScript = `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t}catch(e){d.dataset.theme='dark'}})();`;
+// Runs before first paint so the stored theme never flashes. The bright light theme is the default.
+const themeScript = `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('nanda-theme');d.dataset.theme=t==='dark'?'dark':'light'}catch(e){d.dataset.theme='light'}})();`;
 
 export default function RootLayout({
   children,
@@ -73,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

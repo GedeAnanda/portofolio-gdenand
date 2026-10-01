@@ -16,6 +16,13 @@ export const categoryLabels: Record<SkillCategory, string> = {
 
 export const categoryOrder: SkillCategory[] = ["backend", "ios", "ai", "frontend"];
 
+export const categoryTint: Record<SkillCategory, string> = {
+  backend: "var(--pop-blue)",
+  ios: "var(--pop-pink)",
+  ai: "var(--pop-violet)",
+  frontend: "var(--pop-yellow)",
+};
+
 export const skills: Skill[] = [
   { name: "Go", category: "backend" },
   { name: "Gin", category: "backend" },
@@ -34,6 +41,7 @@ export const skills: Skill[] = [
   { name: "Python", category: "ai" },
   { name: "Claude API", category: "ai" },
   { name: "Gemini API", category: "ai" },
+  { name: "MediaPipe", category: "ai" },
   { name: "IndoBERT", category: "ai" },
   { name: "scikit-learn", category: "ai" },
   { name: "TensorFlow", category: "ai" },

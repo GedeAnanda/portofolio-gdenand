@@ -1,11 +1,14 @@
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
-import type { Project } from "@/lib/projects";
+import { projectTint, type Project } from "@/lib/projects";
 
 export function ProjectHeader({ project: p, className = "" }: { project: Project; className?: string }) {
   return (
     <header className={className}>
-      <p className="t-label">
-        {p.year} / {p.role}
+      <p className="flex flex-wrap items-center gap-3">
+        <span className="sticker" style={{ ["--tint" as string]: projectTint[p.id], ["--r" as string]: "-3deg" }}>
+          {p.year}
+        </span>
+        <span className="t-label">{p.role}</span>
       </p>
       <h3 className="t-title mt-4">{p.title}</h3>
       <p className="mt-3 text-lg text-muted">{p.summary}</p>

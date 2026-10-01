@@ -165,8 +165,12 @@ export default function BeatTheModel() {
                 &ldquo;{current.text}&rdquo;
               </p>
               <div className="flex justify-between font-mono text-[0.6875rem] text-muted">
-                <span className="transition-colors group-data-[lean=neg]:text-ink">Negatif</span>
-                <span className="transition-colors group-data-[lean=pos]:text-ink">Positif</span>
+                <span className="rounded-full px-2 py-0.5 transition-colors group-data-[lean=neg]:bg-pop-pink group-data-[lean=neg]:text-[#17141f]">
+                  Negatif
+                </span>
+                <span className="rounded-full px-2 py-0.5 transition-colors group-data-[lean=pos]:bg-pop-lime group-data-[lean=pos]:text-[#17141f]">
+                  Positif
+                </span>
               </div>
             </div>
           </div>
@@ -189,11 +193,21 @@ export default function BeatTheModel() {
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-3">
-            <button type="button" className="btn btn-quiet" onClick={() => answer("neg")}>
+            <button
+              type="button"
+              className="btn btn-color"
+              style={{ ["--tint" as string]: "var(--pop-pink)" }}
+              onClick={() => answer("neg")}
+            >
               <ArrowLeft size={16} weight="bold" aria-hidden />
               Negatif
             </button>
-            <button type="button" className="btn btn-quiet" onClick={() => answer("pos")}>
+            <button
+              type="button"
+              className="btn btn-color"
+              style={{ ["--tint" as string]: "var(--pop-lime)" }}
+              onClick={() => answer("pos")}
+            >
               Positif
               <ArrowRight size={16} weight="bold" aria-hidden />
             </button>
@@ -224,7 +238,7 @@ function Result({ answers, onAgain }: { answers: Answer[]; onAgain: () => void }
       <dl className="mt-7 grid grid-cols-2 gap-6">
         <div>
           <dt className="t-label">You</dt>
-          <dd className="mt-1 text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-none tracking-[-0.03em] text-accent-text">
+          <dd className="t-sticker mt-1 text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-none tracking-[-0.03em] text-pop-lime">
             {pct.toFixed(1)}%
           </dd>
           <dd className="mt-1 text-sm text-muted">
@@ -233,7 +247,7 @@ function Result({ answers, onAgain }: { answers: Answer[]; onAgain: () => void }
         </div>
         <div>
           <dt className="t-label">SVM</dt>
-          <dd className="mt-1 text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-none tracking-[-0.03em]">
+          <dd className="t-sticker mt-1 text-[clamp(2.5rem,4.5vw,3.5rem)] font-bold leading-none tracking-[-0.03em] text-pop-violet">
             {SVM_ACCURACY}%
           </dd>
           <dd className="mt-1 text-sm text-muted">

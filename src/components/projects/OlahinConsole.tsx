@@ -95,7 +95,10 @@ export default function OlahinConsole() {
       }}
     >
       {/* Window bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3 md:px-5">
+      <div
+        className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-edge px-4 py-3 md:px-5"
+        style={{ background: "color-mix(in oklab, var(--pop-orange) 24%, var(--raised))" }}
+      >
         <div className="flex items-center gap-1" role="tablist" aria-label="Olahin API views">
           {(["console", "schema"] as const).map((v) => (
             <button
@@ -132,7 +135,7 @@ export default function OlahinConsole() {
 
       {view === "schema" ? (
         <figure className="fade-in p-4 md:p-6">
-          <div className="overflow-x-auto rounded-2xl bg-white p-2" data-lenis-prevent>
+          <div className="overflow-x-auto rounded-2xl border-2 border-edge bg-white p-2" data-lenis-prevent>
             <Image
               src={erd}
               alt="Entity relationship diagram: users, recipes, ingredients, steps, bookmarks, challenges and challenge participants"
@@ -147,7 +150,7 @@ export default function OlahinConsole() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
           {/* Endpoints */}
-          <nav aria-label="Endpoints" className="border-b border-line md:border-b-0 md:border-r">
+          <nav aria-label="Endpoints" className="border-b-2 border-edge md:border-b-0 md:border-r-2">
             <ul className="flex gap-1 overflow-x-auto p-3 md:flex-col md:gap-0 md:p-3" data-lenis-prevent>
               {groups.map((g) => (
                 <Fragment key={g}>
@@ -160,7 +163,7 @@ export default function OlahinConsole() {
                           type="button"
                           onClick={() => setEndpoint(e.id)}
                           aria-pressed={endpoint === e.id}
-                          className="flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-[0.8125rem] transition-colors hover:bg-ink/5 aria-pressed:bg-ink/8"
+                          className="flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-[0.8125rem] transition-colors hover:bg-ink/5 aria-pressed:bg-[color-mix(in_oklab,var(--pop-orange)_28%,transparent)] aria-pressed:font-semibold"
                         >
                           <span className="method" data-m={e.method}>
                             {e.method}
@@ -180,7 +183,7 @@ export default function OlahinConsole() {
             {endpoint === "search" && (
               <div className="mb-5">
                 <p className="text-sm font-medium">What&apos;s in your fridge?</p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-2" style={{ ["--chip-on" as string]: "var(--pop-orange)" }}>
                   {fridgeItems.map((item) => (
                     <button
                       key={item}
@@ -197,7 +200,7 @@ export default function OlahinConsole() {
             )}
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-2xl bg-sunken px-4 py-2.5">
+              <div className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-2xl border-2 border-edge bg-sunken px-4 py-2.5">
                 <span className="method" data-m={line.method}>
                   {line.method}
                 </span>
@@ -226,7 +229,7 @@ export default function OlahinConsole() {
                   onChange={(e) => setBody(e.target.value)}
                   spellCheck={false}
                   rows={4}
-                  className="code w-full resize-none rounded-2xl bg-sunken p-4 text-ink outline-none focus-visible:ring-2 focus-visible:ring-ink"
+                  className="code w-full resize-none rounded-2xl border-2 border-edge bg-sunken p-4 text-ink outline-none focus-visible:border-pop-blue"
                 />
                 <p className="text-[0.8125rem] text-muted">Break the email or empty the password to see the Zod errors.</p>
               </div>
@@ -263,7 +266,7 @@ export default function OlahinConsole() {
                     </ul>
                   )}
                   <pre
-                    className="code mt-3 max-h-[360px] overflow-auto overscroll-contain rounded-2xl bg-sunken p-4"
+                    className="code mt-3 max-h-[360px] overflow-auto overscroll-contain rounded-2xl border-2 border-edge bg-sunken p-4"
                     data-lenis-prevent
                     tabIndex={0}
                     aria-label="Response body"
@@ -272,7 +275,7 @@ export default function OlahinConsole() {
                   </pre>
                 </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-line p-5">
+                <div className="rounded-2xl border-2 border-dashed border-edge/40 p-5">
                   <p className="font-medium">Press Send to call the route.</p>
                   <p className="mt-1 text-sm text-muted">
                     Runs in your browser with sample data, using the same routes, status codes and messages as the

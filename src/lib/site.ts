@@ -5,6 +5,8 @@ export const site = {
   location: "Bandung, Indonesia",
   email: "gdenand2020@gmail.com",
   cvUrl: "/cv.pdf" as string | null,
+  // Full profile URL. While null, no TikTok link is shown.
+  tiktok: "https://www.tiktok.com/@voynann" as string | null,
   socials: [
     { label: "GitHub", href: "https://github.com/GedeAnanda" },
     { label: "LinkedIn", href: "https://linkedin.com/in/gedeananda" },

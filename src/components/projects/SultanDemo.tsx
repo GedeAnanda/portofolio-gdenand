@@ -118,7 +118,7 @@ export default function SultanDemo() {
                 />
               ))}
               <div className="absolute inset-0 grid place-items-center bg-black/10">
-                <button type="button" onClick={start} className="btn bg-[#141414] text-[#edede9] shadow-xl hover:bg-accent hover:text-on-accent">
+                <button type="button" onClick={start} className="btn btn-primary">
                   <Play size={16} weight="fill" aria-hidden />
                   Run the live site
                 </button>
@@ -134,7 +134,7 @@ export default function SultanDemo() {
             The real site, running inside the frame. Scroll it.
           </p>
         ) : (
-          <div className="flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Screenshots" data-lenis-prevent>
+          <div className="flex gap-2 overflow-x-auto pb-2 pt-1" role="group" aria-label="Screenshots" data-lenis-prevent>
             {scenes.map((s, i) => (
               <button
                 key={s.id}
@@ -142,7 +142,7 @@ export default function SultanDemo() {
                 onClick={() => setScene(i)}
                 aria-pressed={scene === i}
                 aria-label={`Show ${s.label}`}
-                className="relative h-12 w-[76px] flex-none overflow-hidden rounded-lg opacity-60 ring-1 ring-line transition-opacity hover:opacity-100 aria-pressed:opacity-100 aria-pressed:ring-2 aria-pressed:ring-ink"
+                className="relative h-12 w-[76px] flex-none overflow-hidden rounded-[10px] border-2 border-edge opacity-70 transition-[opacity,transform] hover:opacity-100 aria-pressed:-translate-y-1 aria-pressed:opacity-100 aria-pressed:shadow-[3px_3px_0_var(--hard)]"
               >
                 <Image src={s.src} alt="" fill sizes="80px" className="object-cover" />
               </button>

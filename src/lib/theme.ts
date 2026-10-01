@@ -1,16 +1,8 @@
 import { flushSync } from "react-dom";
 import { ui, type Theme } from "./store";
 
-const STORAGE_KEY = "theme";
-
-export function storedTheme(): Theme | null {
-  try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    return value === "light" || value === "dark" ? value : null;
-  } catch {
-    return null;
-  }
-}
+// Renamed from "theme" so a dark choice saved by the old design does not override the new light default.
+const STORAGE_KEY = "nanda-theme";
 
 export function applyTheme(theme: Theme) {
   const root = document.documentElement;

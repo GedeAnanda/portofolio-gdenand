@@ -13,6 +13,8 @@ const TITLE_CELLS = 21;
 const TAG_CELLS = 11;
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+const tagTone = { Achievement: "yellow", Community: "cyan", "On Going": "pink" } as const;
+
 const tagLabel: Record<JourneyTag, string> = {
   Achievement: "ACHIEVEMENT",
   Community: "COMMUNITY",
@@ -21,7 +23,7 @@ const tagLabel: Record<JourneyTag, string> = {
 
 const pad = (s: string, n: number) => s.toUpperCase().padEnd(n, " ").slice(0, n);
 
-const Cells = memo(function Cells({ text, tone }: { text: string; tone?: "accent" | "dim" }) {
+const Cells = memo(function Cells({ text, tone }: { text: string; tone?: "yellow" | "cyan" | "pink" | "dim" }) {
   return (
     <>
       {Array.from(text).map((ch, i) => (
@@ -143,7 +145,7 @@ export default function DepartureBoard({ items }: { items: JourneyItem[] }) {
                     <Cells text={pad(it.board, TITLE_CELLS)} />
                     <span className="hidden md:flex">
                       <span style={{ width: "calc(var(--cell-w) + var(--cell-gap))" }} />
-                      <Cells text={pad(tagLabel[it.tag], TAG_CELLS)} tone={it.tag === "On Going" ? "accent" : "dim"} />
+                      <Cells text={pad(tagLabel[it.tag], TAG_CELLS)} tone={tagTone[it.tag]} />
                     </span>
                   </span>
                 </button>

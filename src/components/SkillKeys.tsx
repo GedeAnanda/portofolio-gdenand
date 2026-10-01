@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { categoryLabels, categoryOrder, projectsUsing, skills } from "@/lib/skills";
+import { categoryLabels, categoryOrder, categoryTint, projectsUsing, skills } from "@/lib/skills";
 import { unlock } from "@/lib/achievements";
 
 const KEYS_GOAL = 6;
@@ -51,7 +51,7 @@ export default function SkillKeys() {
 
   return (
     <div ref={rootRef} className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
-      <div className="rounded-(--radius-frame) bg-sunken p-4 shadow-[inset_0_0_0_1px_var(--line)] md:p-6 lg:col-span-8">
+      <div className="panel bg-sunken p-4 md:p-6 lg:col-span-8" style={{ ["--panel-shadow" as string]: "var(--pop-cyan)", background: "var(--sunken)" }}>
         <div className="flex flex-col gap-5">
           {categoryOrder.map((cat) => (
             <div key={cat} className="grid grid-cols-1 gap-3 md:grid-cols-[5.5rem_1fr] md:items-center">
@@ -65,6 +65,7 @@ export default function SkillKeys() {
                       type="button"
                       data-key={s.name}
                       className="keycap"
+                      style={{ ["--key" as string]: categoryTint[cat] }}
                       aria-pressed={selected === s.name}
                       onClick={() => {
                         press(s.name);
@@ -81,8 +82,12 @@ export default function SkillKeys() {
       </div>
 
       <div className="lg:col-span-4 lg:pt-4" aria-live="polite">
-        <p className="t-label">{categoryLabels[skill.category]}</p>
-        <p className="t-title mt-3">{skill.name}</p>
+        <p>
+          <span className="sticker" style={{ ["--tint" as string]: categoryTint[skill.category], ["--r" as string]: "-2deg" }}>
+            {categoryLabels[skill.category]}
+          </span>
+        </p>
+        <p className="t-title mt-5">{skill.name}</p>
         <p className="mt-5 leading-relaxed text-muted">
           {usedIn.length > 0 ? (
             <>
@@ -97,7 +102,7 @@ export default function SkillKeys() {
               ))}
             </>
           ) : (
-            "Not part of the five projects on this page."
+            "Not part of the six projects on this page."
           )}
         </p>
         <p className="t-label mt-8 hidden [@media(hover:hover)]:block">Type a letter to press its keys.</p>

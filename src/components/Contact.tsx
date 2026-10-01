@@ -1,17 +1,33 @@
-import { ArrowUpRight, DownloadSimple, GithubLogo, InstagramLogo, LinkedinLogo } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowUpRight,
+  DownloadSimple,
+  GithubLogo,
+  InstagramLogo,
+  LinkedinLogo,
+  TiktokLogo,
+} from "@phosphor-icons/react/dist/ssr";
 import { site } from "@/lib/site";
 import PressToCopy from "./PressToCopy";
 import AskNanda from "./AskNanda";
 import Reveal from "./ui/Reveal";
 
-const icons = { GitHub: GithubLogo, LinkedIn: LinkedinLogo, Instagram: InstagramLogo } as const;
+const icons = { GitHub: GithubLogo, LinkedIn: LinkedinLogo, Instagram: InstagramLogo, TikTok: TiktokLogo } as const;
+
+const socials = [...site.socials, ...(site.tiktok ? [{ label: "TikTok" as const, href: site.tiktok }] : [])];
 
 export default function Contact({ aiEnabled }: { aiEnabled: boolean }) {
   return (
-    <section id="contact" className="layer container-x py-28 md:py-40">
+    <section id="contact" className="layer band border-b-0" style={{ ["--band" as string]: "var(--pop-pink)" }}>
+      <div className="container-x py-28 md:py-40">
       <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-7">
-          <h2 className="t-section max-w-[11ch]">Let&apos;s build something.</h2>
+          <h2 className="t-section max-w-[11ch]">
+            Let&apos;s{" "}
+            <span className="mark" style={{ ["--mark" as string]: "var(--pop-orange)" }}>
+              build
+            </span>{" "}
+            something.
+          </h2>
           <p className="t-lead mt-6">Have a project in mind or just want to say hi? Drop me a message.</p>
           <a
             href={`mailto:${site.email}`}
@@ -20,7 +36,7 @@ export default function Contact({ aiEnabled }: { aiEnabled: boolean }) {
             {site.email}
           </a>
           <ul className="mt-10 flex flex-wrap gap-2">
-            {site.socials.map((s) => {
+            {socials.map((s) => {
               const Icon = icons[s.label];
               return (
                 <li key={s.label}>
@@ -49,6 +65,7 @@ export default function Contact({ aiEnabled }: { aiEnabled: boolean }) {
       </div>
 
       {aiEnabled && <AskNanda />}
+      </div>
     </section>
   );
 }

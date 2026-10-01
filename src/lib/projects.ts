@@ -1,4 +1,4 @@
-export type ProjectId = "firstep" | "lenslift" | "olahin" | "sultan" | "gemastik";
+export type ProjectId = "firstep" | "fotokita" | "lenslift" | "olahin" | "sultan" | "gemastik";
 
 export interface Project {
   id: ProjectId;
@@ -31,6 +31,20 @@ export const projects: Project[] = [
       "Finalist at the Focus Target x Microsoft Elevate AI Showcase, exhibited live at FX Sudirman, Jakarta on 5 June 2026.",
     tech: ["Next.js", "Claude API", "PostgreSQL", "Vercel"],
     links: [{ label: "Live demo", url: "https://firstep-two.vercel.app" }],
+  },
+  {
+    id: "fotokita",
+    title: "fotokita.space",
+    year: 2026,
+    role: "Solo developer, product and UI",
+    team: "Solo project, live and public",
+    summary: "A photobox in the browser: two peace signs take the shot",
+    description:
+      "Hold up a peace sign with both hands and MediaPipe hand tracking fires the shutter, four times. Then pick one of nine layouts, from a 1x4 strip to a newspaper page, add a cover, filter and frame, and save a print-ready PNG or a boomerang clip for Stories, TikTok and Reels.",
+    impact:
+      "Live and used by real people to make photostrips with friends and partners. No install and no upload: the photos, the collage and the video are all made on the device.",
+    tech: ["Next.js", "MediaPipe", "Canvas API", "Tailwind CSS", "Vercel"],
+    links: [{ label: "Live site", url: "https://fotokita.space" }],
   },
   {
     id: "lenslift",
@@ -91,3 +105,13 @@ export const projects: Project[] = [
 ];
 
 export const projectById = (id: ProjectId) => projects.find((p) => p.id === id)!;
+
+/** Each project's colour, used for its stage, sticker and shadows (see the palette in globals.css). */
+export const projectTint: Record<ProjectId, string> = {
+  firstep: "var(--pop-blue)",
+  fotokita: "var(--pop-pink)",
+  lenslift: "var(--pop-lime)",
+  olahin: "var(--pop-orange)",
+  sultan: "var(--pop-yellow)",
+  gemastik: "var(--pop-violet)",
+};

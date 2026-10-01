@@ -12,7 +12,16 @@ const JUMP_KEYS = new Set([" ", "ArrowUp", "w", "W"]);
 function readPalette(): Palette {
   const css = getComputedStyle(document.documentElement);
   const v = (name: string) => css.getPropertyValue(name).trim();
-  return { bg: v("--bg"), ink: v("--ink"), muted: v("--muted"), line: v("--line-strong"), accent: v("--accent") };
+  return {
+    bg: v("--bg"),
+    ink: v("--ink"),
+    muted: v("--muted"),
+    line: v("--line-strong"),
+    pink: v("--pop-pink"),
+    blue: v("--pop-blue"),
+    violet: v("--pop-violet"),
+    orange: v("--pop-orange"),
+  };
 }
 
 const pad = (n: number) => String(n).padStart(5, "0");
@@ -154,7 +163,11 @@ export default function ShipIt() {
           press();
         }}
         onPointerUp={() => gameRef.current?.release()}
-        className="panel relative cursor-pointer touch-manipulation select-none overflow-hidden outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--ink)]"
+        className="panel relative cursor-pointer touch-manipulation select-none overflow-hidden outline-none focus-visible:border-pop-blue"
+        style={{
+          ["--panel-shadow" as string]: "var(--pop-pink)",
+          background: "color-mix(in oklab, var(--pop-cyan) 16%, var(--raised))",
+        }}
       >
         <div className="pointer-events-none absolute right-4 top-3 z-10 flex gap-5 font-mono text-[0.75rem] text-muted md:right-6 md:top-5">
           <span>
@@ -168,10 +181,13 @@ export default function ShipIt() {
         <canvas ref={canvasRef} className="block aspect-[3/2] w-full font-mono sm:aspect-[2/1] md:aspect-[3/1]" aria-hidden />
 
         {phase !== "running" && (
-          <div className="fade-in absolute inset-0 flex flex-col items-start justify-center gap-4 bg-[color-mix(in_oklab,var(--raised)_72%,transparent)] px-6 md:px-12">
+          <div className="fade-in absolute inset-0 flex flex-col items-start justify-center gap-4 bg-[color-mix(in_oklab,var(--raised)_62%,transparent)] px-6 md:px-12">
             {phase === "idle" ? (
               <>
-                <p className="text-[clamp(2rem,5vw,3.75rem)] font-extrabold leading-none tracking-[-0.04em]" style={{ fontStretch: "125%" }}>
+                <p
+                  className="t-sticker text-[clamp(2rem,5vw,3.75rem)] font-extrabold leading-none tracking-[-0.04em] text-pop-pink"
+                  style={{ fontStretch: "125%" }}
+                >
                   Ship It
                 </p>
                 <p className="max-w-[40ch] text-sm text-muted md:text-base">

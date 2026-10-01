@@ -15,6 +15,7 @@ import {
   Keyboard,
   Lock,
   MapTrifold,
+  Printer,
   RocketLaunch,
   Trophy,
   X,
@@ -36,6 +37,7 @@ import { site } from "@/lib/site";
 const icons: Record<AchievementId, Icon> = {
   tour: MapTrifold,
   scroll: Browser,
+  print: Printer,
   macro: ForkKnife,
   fridge: CookingPot,
   token: Key,
@@ -50,6 +52,9 @@ const icons: Record<AchievementId, Icon> = {
 };
 
 const total = achievements.length;
+const TINTS = ["var(--pop-pink)", "var(--pop-blue)", "var(--pop-lime)", "var(--pop-orange)", "var(--pop-violet)", "var(--pop-cyan)", "var(--pop-yellow)"];
+/** Each achievement keeps one colour wherever its badge shows up. */
+const tintOf = (id: AchievementId) => TINTS[achievements.findIndex((a) => a.id === id) % TINTS.length];
 const byId = Object.fromEntries(achievements.map((a) => [a.id, a])) as Record<AchievementId, (typeof achievements)[number]>;
 
 function useUnlockedCount() {
@@ -64,11 +69,11 @@ export function TrophyButton({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={() => setPanelOpen(true)}
-      className={`inline-flex h-10 items-center gap-2 rounded-full px-3.5 font-mono text-[0.75rem] text-ink ring-1 ring-line ring-inset transition-shadow hover:ring-ink ${className}`}
+      className={`inline-flex h-10 items-center gap-2 rounded-full border-2 border-edge bg-pop-yellow px-3.5 font-mono text-[0.75rem] font-semibold text-[#17141f] shadow-[3px_3px_0_var(--hard)] transition-[transform,box-shadow] hover:-translate-x-px hover:-translate-y-px hover:shadow-[4px_4px_0_var(--hard)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none ${className}`}
       aria-label={`Achievements, ${count} of ${total} unlocked`}
       aria-haspopup="dialog"
     >
-      <Trophy size={16} weight={count > 0 ? "fill" : "regular"} className={count > 0 ? "text-accent-text" : ""} aria-hidden />
+      <Trophy size={16} weight={count > 0 ? "fill" : "bold"} aria-hidden />
       <span key={count} className={count > 0 ? "toast-in" : undefined}>
         {count}/{total}
       </span>
@@ -86,8 +91,8 @@ function ToastCard({ toast }: { toast: Toast }) {
 
   if (toast.kind === "info") {
     return (
-      <div className="toast-in panel pointer-events-auto flex gap-3 p-4 pr-3 shadow-[0_20px_40px_-20px_rgb(var(--shadow)/0.5)]">
-        <span className="grid size-10 flex-none place-items-center rounded-full bg-accent text-on-accent">
+      <div className="toast-in panel pointer-events-auto flex gap-3 p-4 pr-3" style={{ ["--panel-shadow" as string]: "var(--pop-pink)" }}>
+        <span className="grid size-10 flex-none place-items-center rounded-full border-2 border-edge bg-pop-pink text-[#17141f]">
           <GameController size={20} weight="fill" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
@@ -118,9 +123,13 @@ function ToastCard({ toast }: { toast: Toast }) {
         dismissToast(toast.key);
         setPanelOpen(true);
       }}
-      className="toast-in panel pointer-events-auto flex w-full items-center gap-3 p-3 pr-5 text-left shadow-[0_20px_40px_-20px_rgb(var(--shadow)/0.5)]"
+      className="toast-in panel pointer-events-auto flex w-full items-center gap-3 p-3 pr-5 text-left"
+      style={{ ["--panel-shadow" as string]: tintOf(toast.id) }}
     >
-      <span className="grid size-11 flex-none place-items-center rounded-full bg-accent text-on-accent">
+      <span
+        className="grid size-11 flex-none place-items-center rounded-full border-2 border-edge text-[#17141f]"
+        style={{ background: tintOf(toast.id) }}
+      >
         <Glyph size={22} weight="fill" aria-hidden />
       </span>
       <span className="min-w-0">
@@ -202,7 +211,7 @@ export function AchievementPanel() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="achievements-title"
-        className="toast-in relative m-2 flex w-full max-w-[440px] flex-col overflow-hidden rounded-(--radius-frame) bg-bg shadow-[0_0_0_1px_var(--line)] sm:m-3"
+        className="toast-in relative m-2 flex w-full max-w-[440px] flex-col overflow-hidden rounded-(--radius-frame) border-2 border-edge bg-bg shadow-[6px_6px_0_var(--pop-yellow)] sm:m-3"
       >
         <div className="flex items-start justify-between gap-4 px-6 pb-5 pt-6">
           <div>
@@ -225,7 +234,11 @@ export function AchievementPanel() {
 
         <div className="flex gap-1 px-6" aria-hidden>
           {achievements.map((a, i) => (
-            <span key={a.id} className={`h-1.5 flex-1 rounded-full ${i < count ? "bg-accent" : "bg-ink/12"}`} />
+            <span
+              key={a.id}
+              className={`h-2.5 flex-1 rounded-full border-[1.5px] ${i < count ? "border-edge" : "border-line bg-ink/5"}`}
+              style={i < count ? { background: TINTS[i % TINTS.length] } : undefined}
+            />
           ))}
         </div>
 
@@ -237,9 +250,10 @@ export function AchievementPanel() {
             return (
               <li key={a.id} className="flex items-center gap-3.5 rounded-2xl px-3 py-3">
                 <span
-                  className={`grid size-11 flex-none place-items-center rounded-full ${
-                    done ? "bg-accent text-on-accent" : "text-muted ring-1 ring-line ring-inset"
+                  className={`grid size-11 flex-none place-items-center rounded-full border-2 ${
+                    done ? "border-edge text-[#17141f]" : "border-line text-muted"
                   }`}
+                  style={done ? { background: tintOf(a.id) } : undefined}
                 >
                   {hidden ? <Lock size={18} aria-hidden /> : <Glyph size={20} weight={done ? "fill" : "regular"} aria-hidden />}
                 </span>
@@ -248,7 +262,7 @@ export function AchievementPanel() {
                   <p className="text-sm leading-snug text-muted">{hidden ? "Keep exploring." : a.hint}</p>
                 </div>
                 {done && (
-                  <Check size={18} weight="bold" className="flex-none text-accent-text" aria-label="Unlocked" />
+                  <Check size={18} weight="bold" className="flex-none text-ok" aria-label="Unlocked" />
                 )}
               </li>
             );

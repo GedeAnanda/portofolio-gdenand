@@ -2,7 +2,6 @@
 
 import { useEffect, type ReactNode } from "react";
 import { ui } from "@/lib/store";
-import { applyTheme, storedTheme } from "@/lib/theme";
 import { achievements, loadProgress, notify, unlock } from "@/lib/achievements";
 import SmoothScroll from "./SmoothScroll";
 import { AchievementPanel, AchievementToasts } from "./Achievements";
@@ -13,14 +12,8 @@ const WELCOMED_KEY = "nanda-welcomed";
 export default function Providers({ children }: { children: ReactNode }) {
   useEffect(() => {
     const root = document.documentElement;
-    ui.set({ theme: root.dataset.theme === "light" ? "light" : "dark" });
+    ui.set({ theme: root.dataset.theme === "dark" ? "dark" : "light" });
     loadProgress();
-
-    const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-    const onSystemTheme = () => {
-      if (!storedTheme()) applyTheme(systemDark.matches ? "dark" : "light");
-    };
-    systemDark.addEventListener("change", onSystemTheme);
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onMotion = () => ui.set({ reducedMotion: reduce.matches });
@@ -58,7 +51,6 @@ export default function Providers({ children }: { children: ReactNode }) {
     window.addEventListener("keydown", onKey);
 
     return () => {
-      systemDark.removeEventListener("change", onSystemTheme);
       reduce.removeEventListener("change", onMotion);
       window.removeEventListener("keydown", onKey);
       window.clearTimeout(welcome);

@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import StackBand from "@/components/StackBand";
 import About from "@/components/About";
 import Projects from "@/components/Projects";
 import Arcade from "@/components/Arcade";
@@ -17,6 +18,7 @@ export default function Home() {
       <Navbar />
       <main id="main-content">
         <Hero />
+        <StackBand />
         <About />
         <Projects />
         <Arcade />

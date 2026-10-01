@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 const BASE = { wdth: 108, wght: 720 };
 const PEAK = { wdth: 125, wght: 900 };
 const RADIUS = 420;
+/** Letter colours, in order, cycling if the name is longer. */
+const COLORS = ["var(--pop-pink)", "var(--pop-yellow)", "var(--pop-blue)", "var(--pop-lime)", "var(--pop-orange)"];
 
 /**
  * Display name whose letters widen and thicken as the pointer approaches,
@@ -61,10 +63,12 @@ export default function KineticName({ text }: { text: string }) {
         <span
           key={i}
           data-letter
-          className="hero-rise inline-block"
+          className="pop-in t-sticker inline-block"
           style={{
             fontVariationSettings: `"wdth" ${BASE.wdth}, "wght" ${BASE.wght}`,
-            ["--d" as string]: `${120 + i * 70}ms`,
+            color: COLORS[i % COLORS.length],
+            ["--d" as string]: `${120 + i * 80}ms`,
+            ["--r" as string]: `${i % 2 ? 8 : -8}deg`,
           }}
         >
           {ch}

@@ -4,6 +4,7 @@ import { SVM_ACCURACY, type ProjectId } from "./projects";
 export type AchievementId =
   | "tour"
   | "scroll"
+  | "print"
   | "macro"
   | "fridge"
   | "token"
@@ -25,8 +26,9 @@ export interface Achievement {
 }
 
 export const achievements: Achievement[] = [
-  { id: "tour", title: "Full tour", hint: "Scroll past all five projects." },
+  { id: "tour", title: "Full tour", hint: "Scroll past all six projects." },
   { id: "scroll", title: "Window shopper", hint: "Scroll the FirStep landing page down to its footer." },
+  { id: "print", title: "Print shop", hint: "Print three different fotokita.space layouts." },
   { id: "macro", title: "Macro counter", hint: "Log a scanned meal in the LensLift prototype." },
   { id: "fridge", title: "Fridge raider", hint: "Find a recipe with the Olahin API console." },
   { id: "token", title: "Authorized", hint: "Get a 200 from a protected Olahin route." },

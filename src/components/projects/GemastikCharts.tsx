@@ -45,8 +45,8 @@ export function ConfusionMatrix() {
                   <td
                     key={p}
                     title={`Actual ${word[a].toLowerCase()}, predicted ${word[p].toLowerCase()}: ${v}`}
-                    className={`h-16 rounded-[6px] text-center text-[1rem] font-semibold ${strong ? "text-on-accent" : "text-ink"}`}
-                    style={{ background: `color-mix(in oklab, var(--accent) ${Math.round(12 + t * 88)}%, var(--raised))` }}
+                    className={`h-16 rounded-[8px] border-2 border-edge text-center text-[1rem] font-semibold ${strong ? "text-[#17141f]" : "text-ink"}`}
+                    style={{ background: `color-mix(in oklab, var(--pop-violet) ${Math.round(12 + t * 88)}%, var(--raised))` }}
                   >
                     {v}
                   </td>
@@ -69,7 +69,7 @@ export function ModelTiles() {
       </figcaption>
       <dl className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
         {models.map((m, i) => (
-          <div key={m.name} className={`flex items-baseline justify-between border-t-2 pt-3 sm:block ${i === 0 ? "border-accent" : "border-line"}`}>
+          <div key={m.name} className={`flex items-baseline justify-between border-t-2 pt-3 sm:block ${i === 0 ? "border-pop-violet" : "border-line"}`}>
             <dt className="t-label">{m.name}</dt>
             <dd className={`text-[clamp(1.4rem,2.2vw,1.9rem)] sm:mt-1 font-bold tracking-[-0.03em] ${i === 0 ? "text-ink" : "text-muted"}`}>
               {m.accuracy.toFixed(2)}%
@@ -109,10 +109,10 @@ export function NegativeShare() {
             <span className="text-sm">{r.app}</span>
             <span className="flex items-center gap-2">
               <span
-                className="h-2.5 rounded-r-[4px] transition-opacity"
+                className="h-3.5 rounded-r-[4px] border-2 border-l-0 border-edge transition-opacity"
                 style={{
                   width: `${r.negative * 0.82}%`,
-                  background: i === 0 ? "var(--accent)" : "color-mix(in oklab, var(--ink) 38%, var(--raised))",
+                  background: i === 0 ? "var(--pop-pink)" : "color-mix(in oklab, var(--ink) 30%, var(--raised))",
                   opacity: active && active !== r.app ? 0.45 : 1,
                 }}
               />

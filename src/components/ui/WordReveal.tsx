@@ -4,9 +4,11 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const MARKS = ["var(--pop-cyan)", "var(--pop-yellow)", "var(--pop-pink)", "var(--pop-lime)"];
+
 /**
  * A statement that brightens word by word as it scrolls through the viewport,
- * pacing the read. Words listed in `emphasis` take the accent colour.
+ * pacing the read. Words listed in `emphasis` get a highlighter, each in the next palette colour.
  */
 export default function WordReveal({
   text,
@@ -40,14 +42,16 @@ export default function WordReveal({
   }, []);
 
   const words = text.split(" ");
+  let marked = 0;
   return (
     <p ref={ref} className={className}>
       {words.map((word, i) => {
         const bare = word.replace(/[.,]$/, "");
         const accent = emphasis.includes(bare);
+        const color = accent ? MARKS[marked++ % MARKS.length] : undefined;
         return (
           <span key={i}>
-            <span data-word className={accent ? "text-accent-text" : undefined}>
+            <span data-word className={accent ? "hl" : undefined} style={color ? { ["--mark" as string]: color } : undefined}>
               {word}
             </span>
             {i < words.length - 1 ? " " : null}

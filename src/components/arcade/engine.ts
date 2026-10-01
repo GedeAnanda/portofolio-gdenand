@@ -8,7 +8,10 @@ export interface Palette {
   ink: string;
   muted: string;
   line: string;
-  accent: string;
+  pink: string;
+  blue: string;
+  violet: string;
+  orange: string;
 }
 
 type Kind = "bug" | "pair" | "wall" | "flyer";
@@ -247,9 +250,12 @@ export class ShipItGame {
 
     // Coffee.
     for (const k of this.coffees) {
-      ctx.fillStyle = c.accent;
+      ctx.fillStyle = c.ink;
+      ctx.fillRect(k.x - 6, k.y - 5, 12, 12);
+      ctx.fillRect(k.x + 5, k.y - 3, 4, 7);
+      ctx.fillStyle = c.orange;
       ctx.fillRect(k.x - 5, k.y - 4, 10, 10);
-      ctx.fillRect(k.x + 5, k.y - 2, 3, 5);
+      ctx.fillRect(k.x + 6, k.y - 2, 2, 5);
       ctx.fillStyle = c.muted;
       const wave = Math.sin(this.elapsed * 8 + k.x) * 1.2;
       ctx.fillRect(k.x - 2 + wave, k.y - 10, 1.5, 4);
@@ -263,14 +269,18 @@ export class ShipItGame {
         const count = o.kind === "pair" ? 2 : 1;
         for (let b = 0; b < count; b++) this.drawBug(o.x + b * 24, o.y);
       } else if (o.kind === "wall") {
+        ctx.fillRect(o.x - 1, o.y - 1, o.w + 2, o.h + 1);
+        ctx.fillStyle = c.blue;
         ctx.fillRect(o.x, o.y, o.w, o.h);
-        ctx.fillStyle = c.bg;
+        ctx.fillStyle = c.ink;
         ctx.font = `700 7px ${this.font}`;
         for (let r = 0; r < 3; r++) ctx.fillText(r % 2 ? ">>" : "<<", o.x + 2.5, o.y + 9 + r * 9);
       } else {
         const bob = Math.sin(this.elapsed * 6 + o.x * 0.05) * 1.5;
+        ctx.fillRect(o.x - 1, o.y + bob - 1, o.w + 2, o.h + 2);
+        ctx.fillStyle = c.violet;
         ctx.fillRect(o.x, o.y + bob, o.w, o.h);
-        ctx.fillStyle = c.bg;
+        ctx.fillStyle = c.ink;
         ctx.font = `700 9px ${this.font}`;
         ctx.fillText("500", o.x + 4, o.y + 11 + bob);
       }
@@ -282,13 +292,13 @@ export class ShipItGame {
     ctx.font = `600 9px ${this.font}`;
     for (const p of this.popups) {
       ctx.globalAlpha = 1 - p.age / 0.9;
-      ctx.fillStyle = c.accent;
+      ctx.fillStyle = c.orange;
       ctx.fillText(p.text, p.x - 8, p.y - p.age * 24);
     }
     ctx.globalAlpha = 1;
     if (this.flash > 0) {
       ctx.globalAlpha = Math.min(1, this.flash * 2);
-      ctx.fillStyle = c.accent;
+      ctx.fillStyle = c.blue;
       ctx.font = `700 13px ${this.font}`;
       const text = `v${this.lastMilestone}.0 shipped`;
       const w = ctx.measureText(text).width;
@@ -315,8 +325,10 @@ export class ShipItGame {
     const x = PLAYER.x;
     const y = this.y;
     const run = this.state === "running" && this.grounded ? Math.floor(this.elapsed * 12) % 2 : 0;
-    // Body: a small packet with a header stripe.
-    ctx.fillStyle = c.accent;
+    // Body: a small packet with a header stripe, outlined in ink.
+    ctx.fillStyle = c.ink;
+    ctx.fillRect(x - 1, y - 1, PLAYER.w + 2, PLAYER.h - 3);
+    ctx.fillStyle = c.pink;
     ctx.fillRect(x, y, PLAYER.w, PLAYER.h - 5);
     ctx.fillStyle = c.ink;
     ctx.fillRect(x, y + 6, PLAYER.w, 1.5);

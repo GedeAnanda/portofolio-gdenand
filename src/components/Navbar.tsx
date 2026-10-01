@@ -10,7 +10,7 @@ import { TrophyButton } from "./Achievements";
 import { getLenis, scrollToHash } from "@/lib/scroll";
 
 function ThemeToggle({ className = "" }: { className?: string }) {
-  const theme = useStore(ui, (s) => s.theme, "dark");
+  const theme = useStore(ui, (s) => s.theme, "light");
   const next = theme === "dark" ? "light" : "dark";
   return (
     <button
@@ -92,7 +92,7 @@ export default function Navbar() {
         style={{
           zIndex: "var(--z-nav)",
           background: scrolled ? "color-mix(in oklab, var(--bg) 84%, transparent)" : "transparent",
-          boxShadow: scrolled ? "0 1px 0 var(--line)" : "none",
+          boxShadow: scrolled ? "0 2px 0 var(--edge)" : "none",
           backdropFilter: scrolled ? "blur(14px) saturate(1.2)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(14px) saturate(1.2)" : "none",
         }}
@@ -100,11 +100,11 @@ export default function Navbar() {
         <nav aria-label="Main" className="container-x flex h-16 items-center justify-between">
           <a
             href="#top"
-            className="text-2xl font-extrabold tracking-[-0.04em] text-accent-text"
+            className="t-sticker text-3xl font-extrabold tracking-[-0.04em] text-pop-blue"
             style={{ fontStretch: "125%" }}
             aria-label="Nanda, back to top"
           >
-            N.
+            N<span className="text-pop-pink">.</span>
           </a>
           <ul className="hidden items-center gap-0.5 lg:flex">
             {navLinks.map((link) => (
@@ -112,14 +112,9 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   aria-current={active === link.href ? "true" : undefined}
-                  className="relative rounded-full px-3.5 py-2.5 text-[0.9375rem] font-medium text-muted transition-colors hover:text-ink aria-[current=true]:text-ink"
+                  className="relative rounded-full px-3.5 py-2 text-[0.9375rem] font-semibold text-muted transition-colors hover:bg-ink/6 hover:text-ink aria-[current=true]:bg-pop-yellow aria-[current=true]:text-[#17141f] aria-[current=true]:shadow-[inset_0_0_0_2px_var(--edge)]"
                 >
                   {link.label}
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-3.5 bottom-1 h-px origin-left bg-accent transition-transform duration-300"
-                    style={{ transform: active === link.href ? "scaleX(1)" : "scaleX(0)" }}
-                  />
                 </a>
               </li>
             ))}
@@ -153,11 +148,8 @@ export default function Navbar() {
           style={{ zIndex: "var(--z-menu)" }}
         >
           <div className="container-x flex h-16 items-center justify-between">
-            <span
-              className="text-2xl font-extrabold tracking-[-0.04em] text-accent-text"
-              style={{ fontStretch: "125%" }}
-            >
-              N.
+            <span className="t-sticker text-3xl font-extrabold tracking-[-0.04em] text-pop-blue" style={{ fontStretch: "125%" }}>
+              N<span className="text-pop-pink">.</span>
             </span>
             <button
               type="button"

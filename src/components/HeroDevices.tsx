@@ -60,6 +60,17 @@ export default function HeroDevices() {
 
   return (
     <div className="relative mx-auto aspect-[1.08] w-full max-w-[720px] lg:mr-0">
+      {/* Two flat shapes behind the devices, for colour. */}
+      <span
+        aria-hidden
+        className="pop-in absolute bottom-[4%] left-[4%] aspect-square w-[38%] rounded-full border-2 border-edge bg-pop-yellow"
+        style={{ ["--d" as string]: "120ms" }}
+      />
+      <span
+        aria-hidden
+        className="pop-in absolute right-[-2%] top-[-3%] aspect-square w-[24%] rounded-[30%] border-2 border-edge bg-pop-pink"
+        style={{ ["--d" as string]: "60ms", ["--r" as string]: "14deg", transform: "rotate(14deg)" }}
+      />
       <a
         ref={(el) => {
           layers.current[0] = el;
@@ -68,7 +79,13 @@ export default function HeroDevices() {
         aria-label="FirStep in a browser. Go to the project."
         className="absolute right-0 top-[3%] block w-[88%] will-change-transform"
       >
-        <div className="hero-rise" style={{ ["--d" as string]: "200ms" }}>
+        <div className="hero-rise relative" style={{ ["--d" as string]: "200ms" }}>
+        <span
+          className="sticker pop-in absolute -left-4 -top-6 z-10"
+          style={{ ["--tint" as string]: "var(--pop-cyan)", ["--r" as string]: "-4deg", ["--d" as string]: "700ms" }}
+        >
+          Next.js + Claude API
+        </span>
         <BrowserFrame url="firstep-two.vercel.app">
           <Image
             src={firstepLanding}
@@ -90,7 +107,13 @@ export default function HeroDevices() {
         aria-label="LensLift on an iPhone. Go to the project."
         className="absolute bottom-[1%] left-0 block w-[28%] will-change-transform"
       >
-        <div className="hero-rise" style={{ ["--d" as string]: "340ms" }}>
+        <div className="hero-rise relative" style={{ ["--d" as string]: "340ms" }}>
+        <span
+          className="sticker pop-in absolute -right-[38%] top-[14%] z-10"
+          style={{ ["--tint" as string]: "var(--pop-lime)", ["--r" as string]: "6deg", ["--d" as string]: "850ms" }}
+        >
+          SwiftUI + Go
+        </span>
         <PhoneFrame tone="dark">
           {lensliftScreens.map((s, i) => (
             <Image
@@ -116,7 +139,13 @@ export default function HeroDevices() {
         aria-label="FirStep simulation result on a phone. Go to the project."
         className="absolute bottom-[6%] right-[7%] block w-[24%] will-change-transform"
       >
-        <div className="hero-rise" style={{ ["--d" as string]: "460ms" }}>
+        <div className="hero-rise relative" style={{ ["--d" as string]: "460ms" }}>
+        <span
+          className="sticker pop-in absolute -bottom-5 -left-[30%] z-10"
+          style={{ ["--tint" as string]: "var(--pop-orange)", ["--r" as string]: "-5deg", ["--d" as string]: "1000ms" }}
+        >
+          AI on TikTok
+        </span>
         <PhoneFrame tone="light" screen="#fafafa">
           <Image
             src={firstepResult}
