@@ -1,0 +1,53 @@
+import type { Theme } from "./store";
+
+/** Colours for the 3D scenes. Mirrors the CSS tokens in globals.css. */
+export const palette = {
+  light: {
+    bg: "#e6e6e2",
+    ink: "#141414",
+    accent: "#e2602f",
+    pinField: "#d8d8d3",
+    pinShadow: "#34342f",
+    pinLight: "#f6f6f2",
+    keyAlpha: "#f3f3ef",
+    keyMod: "#b9b9b3",
+    legend: "#1c1c1b",
+    body: "#d4d4cf",
+    ceramic: "#f1f1ed",
+    ceramicDark: "#c9c9c3",
+    line: "#141414",
+    blade: "#1b1b1a",
+    metal: "#c3c3be",
+    hemiSky: "#ffffff",
+    hemiGround: "#9a9a94",
+    hemi: 0.85,
+    key: 2.3,
+    rim: 0.6,
+    env: 0.75,
+  },
+  dark: {
+    bg: "#0f0f0e",
+    ink: "#edede9",
+    accent: "#e2602f",
+    pinField: "#222221",
+    pinShadow: "#121211",
+    pinLight: "#d9d9d3",
+    keyAlpha: "#33332f",
+    keyMod: "#222220",
+    legend: "#e6e6e1",
+    body: "#1e1e1d",
+    ceramic: "#3a3a37",
+    ceramicDark: "#262624",
+    line: "#edede9",
+    blade: "#111110",
+    metal: "#8d8d88",
+    hemiSky: "#d8d8d2",
+    hemiGround: "#0a0a0a",
+    hemi: 0.35,
+    key: 2.6,
+    rim: 1.4,
+    env: 0.55,
+  },
+} as const satisfies Record<Theme, Record<string, string | number>>;
+
+export type Palette = (typeof palette)[Theme];

@@ -1,213 +1,194 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "./ThemeProvider";
+import { useEffect, useRef, useState } from "react";
+import { CircleHalf, List, X } from "@phosphor-icons/react/dist/ssr";
+import { navLinks } from "@/lib/site";
+import { ui, useStore } from "@/lib/store";
+import { setTheme } from "@/lib/theme";
+import { unlock } from "@/lib/achievements";
+import { TrophyButton } from "./Achievements";
+import { getLenis, scrollToHash } from "@/lib/scroll";
 
-const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Skills", href: "#skills" },
-  { label: "Journey", href: "#journey" },
-  { label: "Contact", href: "#contact" },
-];
+function ThemeToggle({ className = "" }: { className?: string }) {
+  const theme = useStore(ui, (s) => s.theme, "dark");
+  const next = theme === "dark" ? "light" : "dark";
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        setTheme(next, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+        unlock("theme");
+      }}
+      className={`grid size-11 place-items-center rounded-full text-ink transition-colors hover:bg-ink/8 ${className}`}
+      aria-label={`Switch to ${next} theme`}
+    >
+      <CircleHalf size={20} weight="bold" aria-hidden />
+    </button>
+  );
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const [active, setActive] = useState("");
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const sentinel = document.getElementById("nav-sentinel");
+    if (!sentinel) return;
+    const io = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
+    io.observe(sentinel);
+    return () => io.disconnect();
   }, []);
 
-  // Active section detection
   useEffect(() => {
-    const sections = document.querySelectorAll("section[id]");
-    const observer = new IntersectionObserver(
+    const sections = navLinks
+      .map((l) => document.querySelector<HTMLElement>(l.href))
+      .filter((el): el is HTMLElement => !!el);
+    const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
+        for (const entry of entries) if (entry.isIntersecting) setActive(`#${entry.target.id}`);
       },
-      { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" }
+      { rootMargin: "-45% 0px -50% 0px" },
     );
-
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
+    sections.forEach((s) => io.observe(s));
+    const top = document.getElementById("top");
+    const topIo = new IntersectionObserver(([entry]) => entry.isIntersecting && setActive(""), {
+      rootMargin: "-45% 0px -50% 0px",
+    });
+    if (top) topIo.observe(top);
+    return () => {
+      io.disconnect();
+      topIo.disconnect();
+    };
   }, []);
 
-  const scrollTo = (href: string) => {
-    setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  useEffect(() => {
+    if (!open) return;
+    const lenis = getLenis();
+    lenis?.stop();
+    document.documentElement.style.overflow = "hidden";
+    menuRef.current?.querySelector<HTMLElement>("a")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    const toggle = toggleRef.current;
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.documentElement.style.overflow = "";
+      lenis?.start();
+      toggle?.focus();
+    };
+  }, [open]);
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-[9000] transition-all duration-500 ${
-          scrolled ? "nav-glass" : "bg-transparent"
-        }`}
-        aria-label="Main navigation"
+      <div id="nav-sentinel" aria-hidden className="pointer-events-none absolute left-0 top-0 h-24 w-px" />
+      <header
+        className="fixed inset-x-0 top-0 transition-[background-color,box-shadow,backdrop-filter] duration-300"
+        style={{
+          zIndex: "var(--z-nav)",
+          background: scrolled ? "color-mix(in oklab, var(--bg) 84%, transparent)" : "transparent",
+          boxShadow: scrolled ? "0 1px 0 var(--line)" : "none",
+          backdropFilter: scrolled ? "blur(14px) saturate(1.2)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(14px) saturate(1.2)" : "none",
+        }}
       >
-        <div className="section-container flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
+        <nav aria-label="Main" className="container-x flex h-16 items-center justify-between">
           <a
-            href="#"
-            className="text-2xl font-bold font-[var(--font-clash)] tracking-tight"
-            style={{ color: "var(--accent-primary)", fontFamily: "var(--font-clash)" }}
-            aria-label="Home"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
+            href="#top"
+            className="text-2xl font-extrabold tracking-[-0.04em] text-accent-text"
+            style={{ fontStretch: "125%" }}
+            aria-label="Nanda, back to top"
           >
             N.
           </a>
-
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-8">
+          <ul className="hidden items-center gap-0.5 lg:flex">
             {navLinks.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className={`text-sm font-medium transition-colors duration-300 relative ${
-                  activeSection === link.href.slice(1)
-                    ? "text-[var(--accent-primary)]"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                }`}
-                aria-label={`Navigate to ${link.label}`}
-              >
-                {link.label}
-                {activeSection === link.href.slice(1) && (
-                  <motion.div
-                    layoutId="navIndicator"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--accent-primary)] rounded-full"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  aria-current={active === link.href ? "true" : undefined}
+                  className="relative rounded-full px-3.5 py-2.5 text-[0.9375rem] font-medium text-muted transition-colors hover:text-ink aria-[current=true]:text-ink"
+                >
+                  {link.label}
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-3.5 bottom-1 h-px origin-left bg-accent transition-transform duration-300"
+                    style={{ transform: active === link.href ? "scaleX(1)" : "scaleX(0)" }}
                   />
-                )}
-              </button>
+                </a>
+              </li>
             ))}
-          </div>
-
-          {/* Right Side */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* Theme Toggle */}
+          </ul>
+          <div className="flex items-center gap-1">
+            <TrophyButton className="mr-1" />
+            <ThemeToggle />
             <button
-              onClick={(e) => toggleTheme(e)}
-              className="w-9 h-9 rounded-full flex items-center justify-center border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] transition-all duration-300"
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              ref={toggleRef}
+              type="button"
+              className="grid size-11 place-items-center rounded-full text-ink lg:hidden"
+              onClick={() => setOpen(true)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label="Open menu"
             >
-              {theme === "dark" ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="5" />
-                  <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                  <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-              )}
+              <List size={22} weight="bold" aria-hidden />
             </button>
-
-            {/* Download CV */}
-            <a
-              href="/cv.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-medium border border-[var(--accent-primary)] text-[var(--accent-primary)] rounded-lg hover:bg-[var(--accent-primary)] hover:text-white transition-all duration-300"
-              aria-label="Download CV"
-            >
-              Download CV
-            </a>
           </div>
+        </nav>
+      </header>
 
-          {/* Mobile Hamburger */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 w-8 h-8 items-center justify-center z-[9999]"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-            aria-expanded={mobileOpen}
-          >
-            <motion.span
-              animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className="block w-6 h-0.5 bg-[var(--text-primary)]"
-            />
-            <motion.span
-              animate={mobileOpen ? { opacity: 0, x: -20 } : { opacity: 1, x: 0 }}
-              className="block w-6 h-0.5 bg-[var(--text-primary)]"
-            />
-            <motion.span
-              animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className="block w-6 h-0.5 bg-[var(--text-primary)]"
-            />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mobile-menu"
-          >
-            {navLinks.map((link, i) => (
-              <motion.button
-                key={link.href}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 30 }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
-                onClick={() => scrollTo(link.href)}
-                className="text-3xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors"
-                style={{ fontFamily: "var(--font-clash)" }}
-              >
-                {link.label}
-              </motion.button>
-            ))}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 30 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-              className="flex gap-4 mt-8"
+      {open && (
+        <div
+          id="mobile-menu"
+          ref={menuRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className="fixed inset-0 flex flex-col bg-bg lg:hidden"
+          style={{ zIndex: "var(--z-menu)" }}
+        >
+          <div className="container-x flex h-16 items-center justify-between">
+            <span
+              className="text-2xl font-extrabold tracking-[-0.04em] text-accent-text"
+              style={{ fontStretch: "125%" }}
             >
-              <button
-                onClick={(e) => {
-                  toggleTheme(e);
-                  setMobileOpen(false);
-                }}
-                className="px-4 py-2 text-sm border border-[var(--border-color)] rounded-lg text-[var(--text-secondary)]"
-              >
-                {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
-              </button>
-              <a
-                href="/cv.pdf"
-                className="px-4 py-2 text-sm border border-[var(--accent-primary)] text-[var(--accent-primary)] rounded-lg"
-              >
-                Download CV
-              </a>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              N.
+            </span>
+            <button
+              type="button"
+              className="grid size-11 place-items-center rounded-full text-ink"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+            >
+              <X size={22} weight="bold" aria-hidden />
+            </button>
+          </div>
+          <ul className="container-x mt-6 flex flex-1 flex-col gap-1">
+            {navLinks.map((link, i) => (
+              <li key={link.href} className="hero-rise" style={{ ["--d" as string]: `${60 + i * 50}ms` }}>
+                <a
+                  href={link.href}
+                  onClick={(e) => {
+                    // Close first: scrolling is locked while the menu is open.
+                    e.preventDefault();
+                    setOpen(false);
+                    requestAnimationFrame(() => requestAnimationFrame(() => scrollToHash(link.href)));
+                  }}
+                  className="block py-2 text-5xl font-bold tracking-[-0.03em] text-ink"
+                  style={{ fontStretch: "115%" }}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
   );
 }

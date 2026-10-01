@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nanda portfolio
 
-## Getting Started
-
-First, run the development server:
+Personal site of Gede Ananda (Nanda): backend engineer building Go APIs, native iOS apps and AI-powered tools.
+Next.js 16, React 19, Tailwind CSS v4, react-three-fiber, GSAP and Lenis.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build && npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable         | Required | What it does                                                                                     |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `GEMINI_API_KEY` | no       | Turns on the "Ask a quick question" box in the contact section. Without it the box is not shown. |
+| `GEMINI_MODEL`   | no       | Gemini model for that box. Defaults to `gemini-flash-latest`.                                    |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The question box is checked at build time, so redeploy after adding the key.
 
-## Learn More
+Content lives in `src/lib`: `site.ts` (name, email, socials, CV link), `projects.ts`, `skills.ts` and `journey.ts`.
+To show a CV link, put the file in `public/cv.pdf` and set `cvUrl: "/cv.pdf"` in `src/lib/site.ts`.
 
-To learn more about Next.js, take a look at the following resources:
+## How the 3D works
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Every 3D object renders into one fixed, shared WebGL canvas, so the page only ever holds a single WebGL context.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Sections place an empty `<ViewSlot>` (`src/components/ui/ViewSlot.tsx`). It registers its `<div>` in `src/lib/stage.ts`.
+- `src/components/three/Stage.tsx` is loaded after the page is idle and draws each registered slot's scene into that
+  div's rectangle with drei's `View`. three.js is not part of the initial JavaScript.
+- `src/components/SmoothScroll.tsx` runs one GSAP ticker: Lenis scrolls first, then the canvas renders
+  (`frameloop="never"` + `advance()`), so the 3D stays locked to the DOM while scrolling. Rendering stops while no
+  slot is on screen.
+- Devices without WebGL 2 get plain fallbacks (portrait photo, text-only projects, a regular copy button).
 
-## Deploy on Vercel
+| Scene           | File                                                           |
+| --------------- | -------------------------------------------------------------- |
+| Hero pin board  | `src/components/three/PinField.tsx`                            |
+| Projects        | `src/components/three/ProjectStage.tsx` and `three/projects/*` |
+| Skills keyboard | `src/components/three/Keyboard.tsx`                            |
+| Contact button  | `src/components/three/PushButton.tsx`                          |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The Journey board is CSS 3D (`src/components/ui/DepartureBoard.tsx`).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Changing the portrait
+
+The pin board reads `public/images/portrait-pins.png`, a 160 x 200 cut-out with a transparent background. On a Mac,
+`scripts/portrait-cutout.swift` makes one from any photo using Apple's Vision framework (see the usage note at the
+top of the script). The relief pushes the face forward from about 38% across and 29% down the crop; if a new photo
+frames the face elsewhere, adjust `FACE` in `PinField.tsx`.

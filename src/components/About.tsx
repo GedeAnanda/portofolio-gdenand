@@ -1,89 +1,53 @@
-"use client";
+import Image from "next/image";
+import portrait from "../../public/avatar.jpg";
+import Reveal from "./ui/Reveal";
+import WordReveal from "./ui/WordReveal";
 
-import { useRef } from "react";
-import { motion } from "framer-motion";
-
-const techStack = [
-  "Go", "Node.js", "PostgreSQL", "REST API", "JWT",
-  "Express", "Prisma", "Railway", "Docker",
-  "React", "Next.js", "Python", "TensorFlow", "Git",
-  "Swift", "SwiftUI",
+const facts = [
+  { term: "Focus", detail: "API design, data modelling and the apps built on top" },
+  { term: "Studying", detail: "Informatics Engineering at Telkom University" },
+  { term: "Now", detail: "Software Engineering x AI bootcamp at RevoU" },
 ];
 
 export default function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-
   return (
-    <section
-      ref={sectionRef}
-      id="about"
-      className="py-24 md:py-32 relative"
-      aria-label="About section"
-    >
-      <div className="section-container">
-        {/* Section Header */}
-        <div className="section-header">
-          <span className="section-number">01.</span>
-          <h2 className="section-title">About Me</h2>
-          <div className="section-line" />
-        </div>
+    <section id="about" className="layer container-x py-28 md:py-40">
+      <h2 className="t-label mb-8 md:mb-12">About</h2>
+      <WordReveal
+        className="max-w-[34ch] text-[clamp(1.75rem,3.5vw,3.25rem)] font-semibold leading-[1.12] tracking-tight"
+        text="I'm Nanda, an Informatics Engineering student at Telkom University in Bandung. I design APIs and data models in Go and Node.js, ship native iOS apps in SwiftUI, and put AI models to work inside real products."
+        emphasis={["Go", "Node.js", "SwiftUI"]}
+      />
 
-        {/* Bio — full width, no stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl mb-20"
-        >
-          <p className="text-[var(--text-secondary)] text-base md:text-lg leading-relaxed mb-4">
-            I&apos;m <span className="text-[var(--text-primary)] font-semibold">Nanda</span>,
-            a backend-focused software engineer based in{" "}
-            <span className="text-[var(--text-primary)]">Bandung, Indonesia</span>.
-            I design and build production-grade APIs, scalable backend services,
-            and robust system architectures — primarily in{" "}
-            <span className="text-[var(--accent-primary)] font-medium">Go</span> and{" "}
-            <span className="text-[var(--accent-primary)] font-medium">Node.js</span>.
-          </p>
-          <p className="text-[var(--text-secondary)] text-base md:text-lg leading-relaxed mb-4">
-            Beyond backend, I ship native iOS apps with Swift/SwiftUI and build
-            AI-powered tools. Currently studying Informatics Engineering at
-            Telkom University while competing and shipping products on a national stage.
-          </p>
-          <div
-            className="flex items-center gap-3 mt-6 p-3 rounded-lg bg-[var(--surface)] border border-[var(--border-color)] w-fit"
-            style={{ fontFamily: "var(--font-jetbrains)" }}
-          >
-            <span className="text-[var(--accent-primary)] text-sm">→</span>
-            <span className="text-xs md:text-sm text-[var(--text-secondary)]">
-              Focus:{" "}
-              <span className="text-[var(--text-primary)]">API Design</span> ·{" "}
-              <span className="text-[var(--text-primary)]">Clean Architecture</span> ·{" "}
-              <span className="text-[var(--text-primary)]">System Reliability</span>
-            </span>
+      <div className="mt-20 grid grid-cols-1 gap-12 md:mt-28 lg:grid-cols-12 lg:gap-8">
+        <Reveal as="figure" className="lg:col-span-5">
+          <div className="overflow-hidden rounded-(--radius-frame) bg-raised">
+            <Image
+              src={portrait}
+              alt="Nanda in front of the FirStep screen at the Festival AI Nusantara booth"
+              sizes="(min-width: 1024px) 38vw, 100vw"
+              placeholder="blur"
+              className="aspect-[4/5] h-auto w-full object-cover object-[50%_35%]"
+            />
           </div>
-        </motion.div>
+          <figcaption className="t-label mt-3">Presenting FirStep at Festival AI Nusantara.</figcaption>
+        </Reveal>
 
-        {/* Tech Stack Marquee */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="marquee-container py-6 border-t border-b border-[var(--border-color)]"
-        >
-          <div className="marquee-track">
-            {[...techStack, ...techStack].map((tech, i) => (
-              <span key={i} className="tech-pill">
-                <span
-                  className="w-1.5 h-1.5 rounded-full inline-block flex-shrink-0"
-                  style={{ background: "var(--accent-primary)" }}
-                />
-                {tech}
-              </span>
+        <div className="flex flex-col justify-end gap-12 lg:col-span-6 lg:col-start-7">
+          <Reveal as="p" className="t-lead text-ink">
+            I like owning a product end to end: the schema, the API contract, the client that calls it and the demo
+            day where people try it. Lately that has meant a national AI showcase, a GEMASTIK paper and my first
+            SwiftUI app.
+          </Reveal>
+          <dl className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
+            {facts.map((f, i) => (
+              <Reveal key={f.term} delay={i * 90} className="border-t border-line pt-4">
+                <dt className="t-label">{f.term}</dt>
+                <dd className="mt-2 text-[0.9375rem] leading-snug">{f.detail}</dd>
+              </Reveal>
             ))}
-          </div>
-        </motion.div>
+          </dl>
+        </div>
       </div>
     </section>
   );

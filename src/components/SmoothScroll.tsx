@@ -1,50 +1,46 @@
 "use client";
 
-import { useEffect, ReactNode } from "react";
+import { useEffect } from "react";
+import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { scrollToHash, setLenis } from "@/lib/scroll";
 
-export default function SmoothScroll({ children }: { children: ReactNode }) {
+/**
+ * Lenis smooth scrolling on the GSAP ticker, so ScrollTrigger reads the same
+ * scroll position Lenis paints. Inner scroll areas opt out with data-lenis-prevent.
+ */
+export default function SmoothScroll() {
   useEffect(() => {
-    let lenis: any;
-    let gsapInstance: any;
+    gsap.registerPlugin(ScrollTrigger);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const init = async () => {
-      const [Lenis, gsapModule, ScrollTriggerModule] = await Promise.all([
-        import("lenis").then((m) => m.default),
-        import("gsap").then((m) => m.default),
-        import("gsap/ScrollTrigger").then((m) => m.ScrollTrigger)
-      ]);
+    const lenis = new Lenis({ autoRaf: false, lerp: 0.11 });
+    lenis.on("scroll", ScrollTrigger.update);
+    setLenis(lenis);
 
-      gsapInstance = gsapModule;
-      gsapInstance.registerPlugin(ScrollTriggerModule);
+    const tick = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
-      lenis = new Lenis({
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        touchMultiplier: 2,
-      });
-
-      lenis.on("scroll", ScrollTriggerModule.update);
-
-      gsapInstance.ticker.add((time: number) => {
-        lenis.raf(time * 1000);
-      });
-
-      gsapInstance.ticker.lagSmoothing(0);
+    // In-page anchors go through Lenis so they share the same easing.
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = (e.target as Element | null)?.closest?.("a[href^='#']");
+      if (!link) return;
+      const hash = link.getAttribute("href");
+      if (!hash || hash === "#main-content") return;
+      if (scrollToHash(hash)) e.preventDefault();
     };
-
-    init();
+    document.addEventListener("click", onClick);
 
     return () => {
-      if (lenis) {
-        lenis.destroy();
-        if (gsapInstance) {
-          gsapInstance.ticker.remove((time: number) => {
-            lenis.raf(time * 1000);
-          });
-        }
-      }
+      document.removeEventListener("click", onClick);
+      gsap.ticker.remove(tick);
+      lenis.destroy();
+      setLenis(null);
     };
   }, []);
 
-  return <>{children}</>;
+  return null;
 }

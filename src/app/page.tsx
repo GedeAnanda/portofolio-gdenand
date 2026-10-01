@@ -1,40 +1,30 @@
-"use client";
-
-import dynamic from "next/dynamic";
-import ThemeProvider from "@/components/ThemeProvider";
-import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-const About = dynamic(() => import("@/components/About"));
-const Projects = dynamic(() => import("@/components/Projects"));
-const Skills = dynamic(() => import("@/components/Skills"));
-const Journey = dynamic(() => import("@/components/Journey"));
-const Contact = dynamic(() => import("@/components/Contact"));
-
-const LoadingScreen = dynamic(() => import("@/components/LoadingScreen"), {
-  ssr: false,
-});
-
-const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
-  ssr: false,
-});
+import About from "@/components/About";
+import Projects from "@/components/Projects";
+import Arcade from "@/components/Arcade";
+import Skills from "@/components/Skills";
+import Journey from "@/components/Journey";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
+  // The question box only renders when the chat endpoint can actually answer.
+  const aiEnabled = Boolean(process.env.GEMINI_API_KEY);
+
   return (
-    <ThemeProvider>
-      <SmoothScroll>
-        <LoadingScreen />
-        <CustomCursor />
-        <Navbar />
-        <main id="main-content">
-          <Hero />
-          <About />
-          <Projects />
-          <Skills />
-          <Journey />
-          <Contact />
-        </main>
-      </SmoothScroll>
-    </ThemeProvider>
+    <>
+      <Navbar />
+      <main id="main-content">
+        <Hero />
+        <About />
+        <Projects />
+        <Arcade />
+        <Skills />
+        <Journey />
+        <Contact aiEnabled={aiEnabled} />
+      </main>
+      <Footer />
+    </>
   );
 }

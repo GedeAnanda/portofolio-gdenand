@@ -30,5 +30,15 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "src/components/three",
+    "src/components/ui/ViewSlot.tsx",
+    "src/components/ui/HeroProgress.tsx",
+    "src/components/PushToCopy.tsx",
+    "src/components/SkillBoard.tsx",
+    "src/components/ProjectShowcase.tsx",
+    "src/lib/stage.ts",
+    "src/lib/palette.ts"
+  ]
 }

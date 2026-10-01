@@ -1,74 +1,93 @@
-export type ProjectCategory = "Backend" | "iOS" | "Frontend" | "Full-Stack";
+export type ProjectId = "firstep" | "lenslift" | "olahin" | "sultan" | "gemastik";
 
 export interface Project {
-  id: string;
+  id: ProjectId;
   title: string;
-  subtitle: string;
   year: number;
+  role: string;
+  team: string;
+  /** One line, shown under the title. */
+  summary: string;
   description: string;
+  impact: string;
   tech: string[];
-  tags: string[];
-  category: ProjectCategory;
-  accentColor: string;
   links: { label: string; url: string }[];
 }
 
+/** Accuracy of the SVM on the 775-review test set, from the team's GEMASTIK paper (709 of 775 correct). */
+export const SVM_ACCURACY = 91.48;
+
 export const projects: Project[] = [
   {
-    id: "olahin",
-    title: "Olahin",
-    subtitle: "Go REST API Backend",
+    id: "firstep",
+    title: "FirStep",
     year: 2026,
+    role: "Team lead, full-stack developer",
+    team: "Team of 3",
+    summary: "AI career simulator for Indonesian students",
     description:
-      "Production-grade REST API backend built in Go for a fitness tracking platform. Features full CRUD for workouts, nutrition logs, and user data — with JWT auth, clean architecture, and Railway deployment.",
-    tech: ["Go", "PostgreSQL", "JWT", "Railway", "REST API"],
-    tags: ["Go", "Backend", "API", "2026"],
-    category: "Backend",
-    accentColor: "#60a5fa",
-    links: [{ label: "GitHub", url: "https://github.com/GedeAnanda/BE-Olahin" }],
+      "Maps a five-year career path with salary projections, then adds a CV Roaster, a Reality Check score and a First Income guide. Built with Next.js and PostgreSQL, with Claude doing the reasoning.",
+    impact:
+      "Finalist at the Focus Target x Microsoft Elevate AI Showcase, exhibited live at FX Sudirman, Jakarta on 5 June 2026.",
+    tech: ["Next.js", "Claude API", "PostgreSQL", "Vercel"],
+    links: [{ label: "Live demo", url: "https://firstep-two.vercel.app" }],
   },
   {
     id: "lenslift",
     title: "LensLift",
-    subtitle: "iOS Gym Companion App",
     year: 2026,
+    role: "iOS and backend developer",
+    team: "Solo project",
+    summary: "iOS fitness app that reads your meal from a photo",
     description:
-      "Full-stack iOS fitness app with AI-powered food photo analysis, workout logging, nutrition tracking, and body weight monitoring. Built end-to-end: native Swift/SwiftUI frontend with a Go REST API backend, deployed on Railway.",
-    tech: ["Swift", "SwiftUI", "Go", "PostgreSQL", "Railway", "Xcode"],
-    tags: ["iOS", "Full-Stack", "AI", "2026"],
-    category: "iOS",
-    accentColor: "#4ade80",
-    links: [{ label: "GitHub", url: "https://github.com/GedeAnanda/lenslift" }],
-  },
-  {
-    id: "firstep",
-    title: "FirStep",
-    subtitle: "AI Career Simulator",
-    year: 2026,
-    description:
-      "AI-powered career simulator for Indonesian college students. Generates personalized 5-year career timelines with salary projections, risk warnings, and milestone events. Selected for Festival AI Nusantara showcase and passed Microsoft Elevate Innovation program.",
-    tech: ["React", "Gemini API", "Node.js", "Express", "Tailwind"],
-    tags: ["AI", "Full-Stack", "Microsoft Elevate", "Competition Winner", "2026"],
-    category: "Full-Stack",
-    accentColor: "#ff6b2b",
+      "Photograph a meal and Claude Vision (claude-haiku-4-5) returns calories and macros. It also logs workouts, body weight and live gym sessions. SwiftUI on the phone, a Go and Gin REST API with PostgreSQL behind it.",
+    impact: "My first Swift project, built from zero: a native client and its Go backend, in two repositories.",
+    tech: ["Swift", "SwiftUI", "Go", "Gin", "GORM", "PostgreSQL", "JWT", "Claude API"],
     links: [
-      { label: "Live Demo", url: "#" },
-      { label: "GitHub", url: "#" },
+      { label: "iOS repo", url: "https://github.com/GedeAnanda/lenslift" },
+      { label: "Backend repo", url: "https://github.com/GedeAnanda/lenslift-backend" },
     ],
   },
   {
-    id: "smoothies-sultan",
+    id: "olahin",
+    title: "Olahin Dong",
+    year: 2026,
+    role: "Backend developer",
+    team: "GDG on Campus Telkom University, team of 3",
+    summary: "Recipes from whatever is already in your fridge",
+    description:
+      "Finds recipes from the ingredients you have, tracks pantry stock and expiry dates, keeps a monthly grocery budget and runs weekly cooking challenges. I built the whole Express API; two teammates built the Flutter app on top of it.",
+    impact:
+      "Sole backend developer: I designed the schema, the REST contract and the auth that both Flutter developers shipped against.",
+    tech: ["Express", "PostgreSQL", "Prisma", "Zod", "JWT", "REST API"],
+    links: [{ label: "Backend repo", url: "https://github.com/GedeAnanda/BE-Olahin" }],
+  },
+  {
+    id: "sultan",
     title: "Smoothies Sultan",
-    subtitle: "Premium Landing Page",
-    year: 2026,
+    year: 2025,
+    role: "Web developer, UI designer",
+    team: "Solo project",
+    summary: "Scroll-driven landing page for a smoothie brand",
     description:
-      "Awwwards-level marketing landing page for a premium smoothie brand. Features cinematic scroll animations, horizontal text marquee, bento grid showcase, and a full-screen loading reveal.",
+      "A loading reveal, a cup that bursts into fruit as you scroll, a manifesto that lights up word by word and a bento showcase. Built with Next.js, GSAP and Framer Motion.",
+    impact: "Live on Vercel. It is where I learned to turn a brand direction into motion without losing performance.",
     tech: ["Next.js", "GSAP", "Framer Motion", "Tailwind CSS", "Vercel"],
-    tags: ["Frontend", "Design", "Animation", "2026"],
-    category: "Frontend",
-    accentColor: "#fbbf24",
-    links: [
-      { label: "Live Site", url: "https://smoothies-sultan.vercel.app" },
-    ],
+    links: [{ label: "Live site", url: "https://smoothies-sultan.vercel.app" }],
+  },
+  {
+    id: "gemastik",
+    title: "GEMASTIK XVIII",
+    year: 2026,
+    role: "Team lead, ML engineer",
+    team: "National competition team",
+    summary: "Sentiment analysis of Indonesian e-government apps",
+    description:
+      "An NLP pipeline over reviews of M-Pajak, Mobile JKN, MyPertamina and SIGNAL: IndoBERT to label the data, TF-IDF features and an SVM classifier, written up as an IEEE-format paper in Indonesian.",
+    impact: `Passed Telkom University's internal selection for GEMASTIK XVIII, Data Mining category. The SVM reached ${SVM_ACCURACY}% accuracy on 775 test reviews.`,
+    tech: ["Python", "IndoBERT", "scikit-learn", "TF-IDF", "SVM"],
+    links: [],
   },
 ];
+
+export const projectById = (id: ProjectId) => projects.find((p) => p.id === id)!;
